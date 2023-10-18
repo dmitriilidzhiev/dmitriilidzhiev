@@ -49,16 +49,6 @@ def test_check_products_count():
     print(products_count)
     assert expected_product_count == actual_products_count
 
-def test_check_products_count():
-    url = "https://automationexercise.com/api/productsList"  # Замените на URL вашего API и путь к ресурсу
-    response = requests.get(url)
-    json_data = response.json()
-    products_count = json_data.get('products', [])
-    actual_products_count = len(products_count)
-    expected_product_count = 34
-    print(products_count)
-    assert expected_product_count == actual_products_count
-
 
 def test_check_prices_are_valid():
     url = "https://automationexercise.com/api/productsList"  # Замените на URL вашего API и путь к ресурсу
