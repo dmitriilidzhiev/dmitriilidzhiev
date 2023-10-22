@@ -2,6 +2,11 @@ import pytest
 import requests
 import pprint
 import json
+import options
+
+
+
+#First api
 
 poshlye_tryapky = {
     "brand": "Polo",
@@ -16,19 +21,22 @@ poshlye_tryapky = {
     }
 }
 
+#allowed_cloth_bands = {
+#    "H&M", "Madame", "Mast & Harbour", "Polo", "Babyhug", "Allen Solly Junior", ""
+#}
+
 def test_check_status_code_is_200():
-    url = "https://automationexercise.com/api/productsList"  # Замените на URL вашего API и путь к ресурсу
-    response = requests.get(url)
+    response = requests.get(options.first_url)
     json_data = response.json()
-    pprint.pprint(json_data)
+    # pprint.pprint(json_data)
 
     assert response.status_code == 200, f"Ошибка: статус ответа {response.status_code}"
     assert json_data["products"][0]["brand"] == "Polo"
 
+#First exersize
 
 def test_check_first_product_body_1():
-    url = "https://automationexercise.com/api/productsList"
-    response = requests.get(url)
+    response = requests.get(options.first_url)
     json_data = response.json()
 
     assert response.status_code == 200, f"Ошибка: статус ответа {response.status_code}"
@@ -40,8 +48,7 @@ def test_check_first_product_body_1():
     assert json_data["products"][0]["category"]["usertype"]["usertype"] == poshlye_tryapky["category"]["usertype"]["usertype"]
 
 def test_check_products_count():
-    url = "https://automationexercise.com/api/productsList"  # Замените на URL вашего API и путь к ресурсу
-    response = requests.get(url)
+    response = requests.get(options.first_url)
     json_data = response.json()
     products_count = json_data.get('products', [])
     actual_products_count = len(products_count)
@@ -51,8 +58,7 @@ def test_check_products_count():
 
 
 def test_check_prices_are_valid():
-    url = "https://automationexercise.com/api/productsList"  # Замените на URL вашего API и путь к ресурсу
-    response = requests.get(url)
+    response = requests.get(options.first_url)
     json_data = response.json()
     products_count = json_data.get('products', [])
 
@@ -64,10 +70,37 @@ def test_check_prices_are_valid():
             product_prices_set.add(price)
         except ValueError:
             pytest.fail(f"Sosesh")
-
     for price in product_prices_set:
-        assert price < 0, f"Progrev ne nachat"
+        assert price > 0, f"Progrev ne nachat"
     print(product_prices_set)
 
 
+#Second exersize api wrong method test
+def test_check_second_api_wrong_status_code():
+    response = requests.post(options.first_url)
+    json_data = response.json()
+    pprint.pprint(json_data)
+    pprint.pprint(response.status_code)
+    assert response.status_code == 200, f"samara"
+    assert json_data["responseCode"]  == 405
+
+
+#Third exersize Brands test api
+def test_check_status_code():
+    response = requests.get(options.second_url)
+    json_data = response.json()
+    pprint.pprint(json_data)
+    pprint.pprint(response.status_code)
+    brand_count = json_data.get('brands', [])
+    actual_brand_count = len(brand_count)
+    expected_brand_count = 34
+    print(actual_brand_count)
+    assert expected_brand_count == actual_brand_count
+    assert response.status_code == 200, f"samara"
+
+def test_check_third_check_first_brand_id():
+    response = requests.get(options.second_url)
+    json_data = response.json()
+    assert json_data["brands"][0]["id"] == 1
+    assert response.status_code == 200, f"samara"
 
